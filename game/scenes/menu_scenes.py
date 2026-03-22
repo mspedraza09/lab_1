@@ -16,8 +16,8 @@ class fondoMenu:
         self.blanco = (255,255,255)
         self.rosado = (252, 0, 153)
         directorio_actual = os.path.dirname(__file__)
-        ruta_fuente = os.path.join(directorio_actual, "imagenes", "Cyberpunks Italic.otf")
-        ruta_fuente02 = os.path.join(directorio_actual, "imagenes", "Cyberpunks.otf")
+        ruta_fuente = os.path.join(directorio_actual, "elementos", "Cyberpunks Italic.otf")
+        ruta_fuente02 = os.path.join(directorio_actual, "elementos", "Cyberpunks.otf")
 
         #self.imagen = pygame.image.load("game/scenes/imagenes/git_menu.gif")
         #self.imagen = pygame.transform.scale(self.imagen, (800, 600)) 
@@ -27,28 +27,49 @@ class fondoMenu:
         except:
             self.fuente = pygame.font.SysFont("Arial",150)
             self.fuente_02 = pygame.font.SysFont("Arial",100)
+
+        self.boton_play = botones_menu(self.rosado, 400,200,self.fuente_02, self.ventana)
+        self.boton_options = botones_menu(self.rosado, 400,300, self.fuente_02, self.ventana)
+        self.boton_credits = botones_menu(self.rosado, 400,400, self.fuente_02, self.ventana)
     
     def titulo_menu(self):
+        rectangulo = pygame.Rect(0,530,800,600)
+        pygame.draw.rect(self.ventana,self.rosado,rectangulo)
+
+        rectangulo_2 = pygame.Rect(5,5,790,510)
+        pygame.draw.rect(self.ventana, self.rosado, rectangulo_2, 3)
         
         dibujar_titulo = self.fuente.render("Arcade", True, self.blanco)
         rect_titulo = dibujar_titulo.get_rect(center=(400, 100))
         self.ventana.blit(dibujar_titulo, rect_titulo)
 
-        #Botones 
-        boton_play = botones_menu(self.rosado, 400,200,self.fuente_02, self.ventana)
-        boton_options = botones_menu(self.rosado, 400,300, self.fuente_02, self.ventana)
-        boton_credits = botones_menu(self.rosado, 400,400, self.fuente_02, self.ventana)
+        self.boton_play.dibujar_botones("PLAY")
+        self.boton_options.dibujar_botones("VOLUMEN")
+        self.boton_credits.dibujar_botones("CREDITS")
 
-        boton_play.dibujar_botones("PLAY")
-        boton_options.dibujar_botones("OPTIONS")
-        boton_credits.dibujar_botones("CREDITS")
+    def dibujar_barra_volumen(self, x, y, ancho_total, alto, volumen_actual):
+        dibujar_titulo = self.fuente.render("VOLUMEN", True, self.blanco)
+        rect_titulo = dibujar_titulo.get_rect(center=(400, 100))
+        self.ventana.blit(dibujar_titulo, rect_titulo)
+        # 1. Dibujar el fondo de la barra (el contenedor)
+        rect_fondo = pygame.Rect(x, y, ancho_total, alto)
+        pygame.draw.rect(self.ventana, (50, 50, 50), rect_fondo)
         
+        ancho_relleno = ancho_total * volumen_actual
+        
+        rect_relleno = pygame.Rect(x, y, ancho_relleno, alto)
+        pygame.draw.rect(self.ventana, self.rosado, rect_relleno)
+        
+        pygame.draw.rect(self.ventana, self.blanco, rect_fondo, 2)
 
         rectangulo = pygame.Rect(0,530,800,600)
         pygame.draw.rect(self.ventana,self.rosado,rectangulo)
 
         rectangulo_2 = pygame.Rect(5,5,790,510)
         pygame.draw.rect(self.ventana, self.rosado, rectangulo_2, 3)
+    
+        
+    
 
 
 class botones_menu:
@@ -71,15 +92,6 @@ class botones_menu:
         dibujar_boton = self.fuente.render(mensaje, True, self.color)
         rect_boton = dibujar_boton.get_rect(center=(self.corX,self.corY))
         self.ventana.blit(dibujar_boton, rect_boton)
-     
-          
-    
-    
-
-
-
-
-
     
 
 
