@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os
 
 pygame.init()
 
@@ -18,16 +19,26 @@ class Game:
 
         self.screen = screen
 
-        # Fondo
+        # =========================
+        # CARGAR FONDO AUTOMÁTICO
+        # =========================
+        fondo_path = "game_data/assets/Fondo"
+        fondo_file = os.listdir(fondo_path)[0]
+
         self.background = pygame.image.load(
-            "game_data/assets/Fondo/fondo.png"
+            os.path.join(fondo_path, fondo_file)
         ).convert()
 
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
 
-        # Jugador
+        # =========================
+        # CARGAR JUGADOR
+        # =========================
+        player_path = "game_data/assets/Biker"
+        player_file = os.listdir(player_path)[0]
+
         self.player_img = pygame.image.load(
-            "game_data/assets/Biker/Biker_run.png"
+            os.path.join(player_path, player_file)
         ).convert_alpha()
 
         self.player_img = pygame.transform.scale(self.player_img, (80, 80))
@@ -35,19 +46,27 @@ class Game:
         self.player = pygame.Rect(100, 400, 80, 80)
         self.speed = 5
 
-        # Enemigos
+        # =========================
+        # CARGAR ENEMIGO
+        # =========================
+        enemy_path = "game_data/assets/Punk1"
+        enemy_file = os.listdir(enemy_path)[0]
+
         self.enemy_img = pygame.image.load(
-            "game_data/assets/Punk1/Punk_run.png"
+            os.path.join(enemy_path, enemy_file)
         ).convert_alpha()
 
         self.enemy_img = pygame.transform.scale(self.enemy_img, (80, 80))
 
         self.enemies = [
             [600, 400],
-            [700, 400],
-            [800, 400]
+            [750, 400],
+            [900, 400]
         ]
 
+    # =========================
+    # UPDATE
+    # =========================
     def update(self):
 
         keys = pygame.key.get_pressed()
@@ -68,6 +87,9 @@ class Game:
         for enemy in self.enemies:
             enemy[0] -= 3
 
+    # =========================
+    # DRAW
+    # =========================
     def draw(self):
 
         # fondo
