@@ -1,6 +1,7 @@
 import pygame
 import os
 from game_data.profile_manager import SaveProfile
+from game_data.leaderboard_manager import SaveScore
 def crear_ventana(titulo, color):
     pygame.init()
     ventana = pygame.display.set_mode((800, 600))
@@ -233,6 +234,32 @@ class EscenaLogin:
         rect_borde = pygame.Rect(5, 5, 790, 590)
         pygame.draw.rect(self.ventana, self.rosado, rect_borde, 3)
 
+class TopScores:
+    def __init__(self, ventana):
+        self.ventana = ventana 
+        self.score = SaveScore()
+        self.blanco = (255,255,255)
+        self.rosado = (252, 0, 153)
+        directorio_actual = os.path.dirname(__file__)
+        ruta_fuente = os.path.join(directorio_actual, "elementos", "Cyberpunks Italic.otf")
+        try:
+            self.fuente = pygame.font.Font(ruta_fuente, 40) # 80 es muy grande para una lista
+            self.fuente_titulo = pygame.font.Font(ruta_fuente, 80)
+        except:
+            self.fuente = pygame.font.SysFont("Arial", 40)
+            self.fuente_titulo = pygame.font.SysFont("Arial", 80)
+    def get_scores(self):
+        scores = self.score.get_top_scores()
+        titulo = self.fuente_titulo.render("RANKING", True, self.rosado)
+        self.ventana.blit(titulo, titulo.get_rect(center=(400, 80)))
+        pos_y = 200
+        for i, (player_id,score) in enumerate(scores):
+            texto = f"{i+1}. {player_id} - {score} PTS"
+            render_score = self.fuente.render(texto, True, self.blanco)
+            
+            rect_score = render_score.get_rect(center=(400, pos_y))
+            self.ventana.blit(render_score, rect_score)
+            pos_y += 50
 
 
 

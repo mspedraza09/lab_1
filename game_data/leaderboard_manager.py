@@ -1,7 +1,7 @@
 
-from game.persistence.Hash_table import StorageEngine
+from game.persistence.Hash_table.storage_engine import StorageEngine
 
-class saveScore:
+class SaveScore:
     def __init__(self):
         self.store = StorageEngine()
     

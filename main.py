@@ -1,5 +1,5 @@
 import pygame
-from game.scenes.menu_scenes import fondoMenu, EscenaLogin
+from game.scenes.menu_scenes import fondoMenu, EscenaLogin, TopScores
 from game.scenes.resources import crear_ventana
 from game.scenes.setting_scenes import Sonido
 from game_data.profile_manager import SaveProfile
@@ -15,6 +15,7 @@ volumen_actual = 0.5
 pygame.mixer.music.set_volume(volumen_actual)
 usuario = SaveProfile()
 login_scene = EscenaLogin(ventana)
+top_scores_scene = TopScores(ventana)
 
 while running:
     for event in pygame.event.get():
@@ -40,6 +41,7 @@ while running:
                         print("¡Click en VOLUMEN!")
 
                     elif menu.boton_top_scores.rect.collidepoint(event.pos):
+                        estado = "top_scores"
                         print("¡Click en TOP SCORES!")
 
                     elif menu.boton_credits_esquina.rect.collidepoint(event.pos):
@@ -71,8 +73,10 @@ while running:
         login_scene.dibujar()
     elif estado == "menu":
         menu.titulo_menu()
-    elif estado == "volumen" or estado == "credits":
+    elif estado == "volumen":
         menu.dibujar_barra_volumen(200,250,400,80,volumen_actual)
+    elif estado == "top_scores":
+        top_scores_scene.get_scores()
     
     pygame.display.flip()
 
