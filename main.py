@@ -3,6 +3,7 @@ from game.scenes.menu_scenes import fondoMenu, EscenaLogin, TopScores
 from game.scenes.resources import crear_ventana
 from game.scenes.setting_scenes import Sonido
 from game_data.profile_manager import SaveProfile
+from game.scenes.game_scenes import GameScene
 
 negro = (0,0,0)
 ventana = crear_ventana("Menu", negro)
@@ -16,6 +17,7 @@ pygame.mixer.music.set_volume(volumen_actual)
 usuario = SaveProfile()
 login_scene = EscenaLogin(ventana)
 top_scores_scene = TopScores(ventana)
+game_scene = GameScene(ventana)
 
 while running:
     for event in pygame.event.get():
@@ -79,7 +81,9 @@ while running:
     elif estado == "top_scores":
         top_scores_scene.get_scores()
     elif estado == "play":
-        #Escribe aquí por favor 
+        game_scene.handle_input()
+        game_scene.update()
+        game_scene.draw() 
         pass
     
     pygame.display.flip()
