@@ -5,6 +5,7 @@ from game.scenes.menu_scenes import botones_menu
 
 class Sonido:
     def __init__(self):
+        os.environ['SDL_AUDIODRIVER'] = 'dummy'
         pygame.mixer.init()
         directorio_actual = os.path.dirname(__file__)
         ruta_sonido = os.path.join(directorio_actual, "elementos","End-of-Line-_From-TRON_-Legacy_Score_.mp3")
