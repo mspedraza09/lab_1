@@ -1,4 +1,4 @@
-from game.persistence.Hash_table import StorageEngine
+from game.persistence.Hash_table.storage_engine import StorageEngine
 
 class SaveProfile:
     def __init__(self):

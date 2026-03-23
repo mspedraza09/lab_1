@@ -1,4 +1,4 @@
-from game.persistence.Hash_table import StorageEngine
+from game.persistence.Hash_table.storage_engine import StorageEngine
 
 class SettingVolumen:
     def __init__(self):
@@ -13,5 +13,5 @@ class SettingVolumen:
         settings = self.store.get("settings:global")
         
         if settings is None:
-            return 50 
-        return settings.get("volume", 50)
+            return 0.50 
+        return settings.get("volume", 0.50)

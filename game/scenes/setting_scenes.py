@@ -2,6 +2,7 @@ import pygame
 import os
 from game.scenes.menu_scenes import botones_menu
 
+
 class Sonido:
     def __init__(self):
         pygame.mixer.init()
@@ -24,3 +25,9 @@ class Sonido:
             pygame.mixer.music.play(-1)
             print("Reproducciendo")
 
+
+
+        
+    
+
+    
