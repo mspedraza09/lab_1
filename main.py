@@ -3,9 +3,9 @@ import sys
 
 pygame.init()
 
-# Ventana
 WIDTH = 800
 HEIGHT = 600
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Juego")
 
@@ -18,37 +18,35 @@ class Game:
 
         self.screen = screen
 
+        # Fondo
+        self.background = pygame.image.load(
+            "game_data/assets/Fondo/fondo.png"
+        ).convert()
+
+        self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
+
         # Jugador
-        self.player = pygame.Rect(400, 300, 64, 64)
+        self.player_img = pygame.image.load(
+            "game_data/assets/Biker/Biker_run.png"
+        ).convert_alpha()
+
+        self.player_img = pygame.transform.scale(self.player_img, (80, 80))
+
+        self.player = pygame.Rect(100, 400, 80, 80)
         self.speed = 5
 
-        # Sprite sheet
-        self.sprite_sheet = pygame.image.load("assets/player_walk.png").convert_alpha()
-
-        self.frame_width = 64
-        self.frame_height = 64
-
-        self.frames = []
-
-        sheet_width = self.sprite_sheet.get_width()
-
-        for i in range(sheet_width // self.frame_width):
-            frame = self.sprite_sheet.subsurface(
-                (i * self.frame_width, 0, self.frame_width, self.frame_height)
-            )
-            self.frames.append(frame)
-
-        self.current_frame = 0
-        self.animation_speed = 0.2
-
         # Enemigos
-        self.enemies = [
-            [200, 100],
-            [500, 200],
-            [300, 400]
-        ]
+        self.enemy_img = pygame.image.load(
+            "game_data/assets/Punk1/Punk_run.png"
+        ).convert_alpha()
 
-        self.enemy_size = 40
+        self.enemy_img = pygame.transform.scale(self.enemy_img, (80, 80))
+
+        self.enemies = [
+            [600, 400],
+            [700, 400],
+            [800, 400]
+        ]
 
     def update(self):
 
@@ -66,26 +64,21 @@ class Game:
         if keys[pygame.K_DOWN]:
             self.player.y += self.speed
 
-        # Animación
-        self.current_frame += self.animation_speed
-
-        if self.current_frame >= len(self.frames):
-            self.current_frame = 0
+        # mover enemigos
+        for enemy in self.enemies:
+            enemy[0] -= 3
 
     def draw(self):
 
-        self.screen.fill((30, 30, 30))
+        # fondo
+        self.screen.blit(self.background, (0, 0))
 
-        # Jugador animado
-        self.screen.blit(self.frames[int(self.current_frame)], self.player)
+        # jugador
+        self.screen.blit(self.player_img, self.player)
 
-        # Enemigos
+        # enemigos
         for enemy in self.enemies:
-            pygame.draw.rect(
-                self.screen,
-                (255, 0, 0),
-                (*enemy, self.enemy_size, self.enemy_size)
-            )
+            self.screen.blit(self.enemy_img, enemy)
 
         pygame.display.flip()
 
