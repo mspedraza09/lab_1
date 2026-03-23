@@ -34,6 +34,7 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1: 
                     if menu.boton_play.rect.collidepoint(event.pos):
+                        estado = "play"
                         print("¡Click en PLAY!")
                     
                     elif menu.boton_options.rect.collidepoint(event.pos):
@@ -77,6 +78,9 @@ while running:
         menu.dibujar_barra_volumen(200,250,400,80,volumen_actual)
     elif estado == "top_scores":
         top_scores_scene.get_scores()
+    elif estado == "play":
+        #Escribe aquí por favor 
+        pass
     
     pygame.display.flip()
 
