@@ -31,11 +31,11 @@ class GameScene:
             os.path.join(player_path, player_files[0])
         ).convert_alpha()
 
-        self.player = pygame.transform.scale(self.player, (80, 80))
+        self.player = pygame.transform.scale(self.player, (120, 120))
 
         self.player_rect = self.player.get_rect()
         self.player_rect.x = 100
-        self.player_rect.y = self.height - 120
+        self.player_rect.y = self.height - 160
 
         self.player_speed = 6
 
@@ -46,7 +46,7 @@ class GameScene:
             os.path.join(enemy_path, enemy_files[0])
         ).convert_alpha()
 
-        self.enemy_img = pygame.transform.scale(self.enemy_img, (80, 80))
+        self.enemy_img = pygame.transform.scale(self.enemy_img, (120, 120))
 
         self.enemies = []
 
@@ -61,7 +61,7 @@ class GameScene:
     def spawn_enemy(self):
         rect = self.enemy_img.get_rect()
         rect.x = self.width
-        rect.y = self.height - 120
+        rect.y = random.randint(self.height - 200, self.height - 120)
         self.enemies.append(rect)
 
     def handle_input(self):
@@ -94,7 +94,7 @@ class GameScene:
         for enemy in self.enemies:
             enemy.x -= 5
 
-        self.enemies = [e for e in self.enemies if e.x > -100]
+        self.enemies = [e for e in self.enemies if e.x > -120]
 
         for enemy in self.enemies:
             if self.player_rect.colliderect(enemy):
