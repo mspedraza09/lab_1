@@ -84,7 +84,7 @@ while running:
         game_scene.handle_input()
         game_scene.update()
         game_scene.draw() 
-        pass
+        
     
     pygame.display.flip()
 
