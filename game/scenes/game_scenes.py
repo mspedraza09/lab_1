@@ -21,14 +21,20 @@ class GameScene:
         self.running = True
         self.game_over = False
 
-        # Score
+        # Score y vidas
         self.score = 0
+        self.lives = 3
+
         self.font = pygame.font.Font(None, 36)
 
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r and self.game_over:
+                    self.__init__(self.screen)  # reiniciar juego
 
     def update(self):
         if self.game_over:
@@ -50,26 +56,33 @@ class GameScene:
 
         # Generar enemigos
         self.spawn_timer += 1
-        if self.spawn_timer > 60:  # más lento
+        if self.spawn_timer > 60:
             x = random.randint(0, 800 - self.enemy_size)
             self.enemies.append([x, 0])
             self.spawn_timer = 0
 
         # Mover enemigos
         for enemy in self.enemies:
-            enemy[1] += 3  # velocidad moderada
+            enemy[1] += 3
 
         # Colisiones
         player_rect = pygame.Rect(*self.player, self.player_size, self.player_size)
 
-        for enemy in self.enemies:
+        for enemy in self.enemies[:]:
             enemy_rect = pygame.Rect(*enemy, self.enemy_size, self.enemy_size)
 
             if player_rect.colliderect(enemy_rect):
-                self.game_over = True
+                self.lives -= 1
+                self.enemies.remove(enemy)
 
-        # Aumentar score
-        self.score += 1
+                if self.lives <= 0:
+                    self.game_over = True
+
+        # Limpiar enemigos fuera de pantalla
+        self.enemies = [enemy for enemy in self.enemies if enemy[1] < 600]
+
+        # Score
+        self.score += 0.1
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -90,12 +103,16 @@ class GameScene:
             )
 
         # Score
-        score_text = self.font.render(f"Score: {self.score}", True, (255, 255, 255))
+        score_text = self.font.render(f"Score: {int(self.score)}", True, (255, 255, 255))
         self.screen.blit(score_text, (10, 10))
+
+        # Vidas
+        lives_text = self.font.render(f"Vidas: {self.lives}", True, (255, 255, 255))
+        self.screen.blit(lives_text, (10, 40))
 
         # Game Over
         if self.game_over:
-            game_over_text = self.font.render("GAME OVER", True, (255, 0, 0))
-            self.screen.blit(game_over_text, (300, 250))
+            game_over_text = self.font.render("GAME OVER - Presiona R", True, (255, 0, 0))
+            self.screen.blit(game_over_text, (200, 250))
 
         pygame.display.flip()
