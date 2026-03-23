@@ -1,5 +1,6 @@
 import pygame
 import random
+import os
 
 class GameScene:
     def __init__(self, screen):
@@ -7,21 +8,32 @@ class GameScene:
 
         self.screen = screen
 
-        # Jugador
+        # RUTA DE ASSETS
+        base_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        assets_path = os.path.join(base_path, "game_data", "assets")
+
+        # CARGAR SPRITE DEL JUGADOR
+        self.player_image = pygame.image.load(
+            os.path.join(assets_path, "Biker", "Biker_idle.png")
+        ).convert_alpha()
+
+        self.player_image = pygame.transform.scale(self.player_image, (80, 80))
+
+        # JUGADOR
         self.player = [400, 500]
-        self.player_size = 50
+        self.player_size = 80
         self.speed = 5
 
-        # Enemigos
+        # ENEMIGOS
         self.enemies = []
         self.enemy_size = 50
         self.spawn_timer = 0
 
-        # Estado del juego
+        # ESTADO DEL JUEGO
         self.running = True
         self.game_over = False
 
-        # Score y vidas
+        # SCORE Y VIDAS
         self.score = 0
         self.lives = 3
 
@@ -34,7 +46,7 @@ class GameScene:
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r and self.game_over:
-                    self.__init__(self.screen)  # reiniciar juego
+                    self.__init__(self.screen)
 
     def update(self):
         if self.game_over:
@@ -42,30 +54,30 @@ class GameScene:
 
         keys = pygame.key.get_pressed()
 
-        # Movimiento jugador
+        # MOVIMIENTO JUGADOR
         if keys[pygame.K_LEFT]:
             self.player[0] -= self.speed
         if keys[pygame.K_RIGHT]:
             self.player[0] += self.speed
 
-        # Limites pantalla
+        # LIMITES DE PANTALLA
         if self.player[0] < 0:
             self.player[0] = 0
         if self.player[0] > 800 - self.player_size:
             self.player[0] = 800 - self.player_size
 
-        # Generar enemigos
+        # GENERAR ENEMIGOS
         self.spawn_timer += 1
         if self.spawn_timer > 60:
             x = random.randint(0, 800 - self.enemy_size)
             self.enemies.append([x, 0])
             self.spawn_timer = 0
 
-        # Mover enemigos
+        # MOVER ENEMIGOS
         for enemy in self.enemies:
             enemy[1] += 3
 
-        # Colisiones
+        # COLISIONES
         player_rect = pygame.Rect(*self.player, self.player_size, self.player_size)
 
         for enemy in self.enemies[:]:
@@ -78,23 +90,19 @@ class GameScene:
                 if self.lives <= 0:
                     self.game_over = True
 
-        # Limpiar enemigos fuera de pantalla
+        # ELIMINAR ENEMIGOS FUERA
         self.enemies = [enemy for enemy in self.enemies if enemy[1] < 600]
 
-        # Score
+        # SCORE
         self.score += 0.1
 
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        # Jugador
-        pygame.draw.rect(
-            self.screen,
-            (0, 255, 0),
-            (*self.player, self.player_size, self.player_size)
-        )
+        # JUGADOR (SPRITE)
+        self.screen.blit(self.player_image, self.player)
 
-        # Enemigos
+        # ENEMIGOS
         for enemy in self.enemies:
             pygame.draw.rect(
                 self.screen,
@@ -102,15 +110,15 @@ class GameScene:
                 (*enemy, self.enemy_size, self.enemy_size)
             )
 
-        # Score
+        # SCORE
         score_text = self.font.render(f"Score: {int(self.score)}", True, (255, 255, 255))
         self.screen.blit(score_text, (10, 10))
 
-        # Vidas
+        # VIDAS
         lives_text = self.font.render(f"Vidas: {self.lives}", True, (255, 255, 255))
         self.screen.blit(lives_text, (10, 40))
 
-        # Game Over
+        # GAME OVER
         if self.game_over:
             game_over_text = self.font.render("GAME OVER - Presiona R", True, (255, 0, 0))
             self.screen.blit(game_over_text, (200, 250))
