@@ -19,9 +19,7 @@ class Game:
 
         self.screen = screen
 
-        # =========================
-        # CARGAR FONDO AUTOMÁTICO
-        # =========================
+    
         fondo_path = "game_data/assets/Fondo"
         fondo_file = os.listdir(fondo_path)[0]
 
@@ -31,9 +29,7 @@ class Game:
 
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
 
-        # =========================
-        # CARGAR JUGADOR
-        # =========================
+        
         player_path = "game_data/assets/Biker"
         player_file = os.listdir(player_path)[0]
 
@@ -46,9 +42,7 @@ class Game:
         self.player = pygame.Rect(100, 400, 80, 80)
         self.speed = 5
 
-        # =========================
-        # CARGAR ENEMIGO
-        # =========================
+    
         enemy_path = "game_data/assets/Punk1"
         enemy_file = os.listdir(enemy_path)[0]
 
@@ -64,9 +58,7 @@ class Game:
             [900, 400]
         ]
 
-    # =========================
-    # UPDATE
-    # =========================
+    
     def update(self):
 
         keys = pygame.key.get_pressed()
@@ -87,9 +79,7 @@ class Game:
         for enemy in self.enemies:
             enemy[0] -= 3
 
-    # =========================
-    # DRAW
-    # =========================
+    
     def draw(self):
 
         # fondo

@@ -13,9 +13,6 @@ class GameScene:
         base_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         assets_path = os.path.join(base_path, "game_data", "assets")
 
-        
-        # CARGAR FONDO
-       
         fondo_path = os.path.join(assets_path, "Fondo")
         fondo_files = os.listdir(fondo_path)
 
@@ -27,9 +24,6 @@ class GameScene:
             self.background, (self.width, self.height)
         )
 
-        
-        # CARGAR JUGADOR
-        
         player_path = os.path.join(assets_path, "Biker")
         player_files = os.listdir(player_path)
 
@@ -45,9 +39,6 @@ class GameScene:
 
         self.player_speed = 6
 
-        
-        # CARGAR ENEMIGO
-        
         enemy_path = os.path.join(assets_path, "Punk1")
         enemy_files = os.listdir(enemy_path)
 
@@ -59,9 +50,6 @@ class GameScene:
 
         self.enemies = []
 
-        
-        # GAME STATE
-        
         self.font = pygame.font.SysFont(None, 36)
 
         self.score = 0
@@ -70,18 +58,12 @@ class GameScene:
 
         self.spawn_timer = 0
 
-    
-    # SPAWN ENEMIGOS
-    
     def spawn_enemy(self):
         rect = self.enemy_img.get_rect()
         rect.x = self.width
         rect.y = self.height - 120
         self.enemies.append(rect)
 
-    
-    # INPUT
-    
     def handle_input(self):
 
         keys = pygame.key.get_pressed()
@@ -98,9 +80,6 @@ class GameScene:
         if keys[pygame.K_RIGHT]:
             self.player_rect.x += self.player_speed
 
-    
-    # UPDATE
-    
     def update(self):
 
         if self.game_over:
@@ -112,14 +91,11 @@ class GameScene:
             self.spawn_enemy()
             self.spawn_timer = 0
 
-        # mover enemigos
         for enemy in self.enemies:
             enemy.x -= 5
 
-        # eliminar enemigos fuera de pantalla
         self.enemies = [e for e in self.enemies if e.x > -100]
 
-        # colisiones
         for enemy in self.enemies:
             if self.player_rect.colliderect(enemy):
                 self.lives -= 1
@@ -130,22 +106,15 @@ class GameScene:
 
         self.score += 1
 
-    
-    # DRAW
-    
     def draw(self):
 
-        # fondo
         self.screen.blit(self.background, (0, 0))
 
-        # jugador
         self.screen.blit(self.player, self.player_rect)
 
-        # enemigos
         for enemy in self.enemies:
             self.screen.blit(self.enemy_img, enemy)
 
-        # UI
         score_text = self.font.render(f"Score: {self.score}", True, (255, 255, 255))
         self.screen.blit(score_text, (10, 10))
 
@@ -155,5 +124,3 @@ class GameScene:
         if self.game_over:
             text = self.font.render("GAME OVER - Presiona R", True, (255, 0, 0))
             self.screen.blit(text, (200, 250))
-
-        pygame.display.flip()
