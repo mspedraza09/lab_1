@@ -58,6 +58,9 @@ class GameScene:
 
         self.spawn_timer = 0
 
+        # evita perder varias vidas seguidas
+        self.hit_cooldown = 0
+
     def spawn_enemy(self):
         rect = self.enemy_img.get_rect()
         rect.x = self.width
@@ -91,14 +94,25 @@ class GameScene:
             self.spawn_enemy()
             self.spawn_timer = 0
 
+        # mover enemigos
         for enemy in self.enemies:
             enemy.x -= 5
 
+        # eliminar enemigos fuera de pantalla
         self.enemies = [e for e in self.enemies if e.x > -120]
 
-        for enemy in self.enemies:
+        # cooldown de daño
+        if self.hit_cooldown > 0:
+            self.hit_cooldown -= 1
+
+        # detectar colisiones
+        for enemy in self.enemies[:]:
             if self.player_rect.colliderect(enemy):
-                self.lives -= 1
+
+                if self.hit_cooldown == 0:
+                    self.lives -= 1
+                    self.hit_cooldown = 60
+
                 self.enemies.remove(enemy)
 
                 if self.lives <= 0:
