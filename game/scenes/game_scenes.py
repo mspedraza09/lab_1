@@ -53,12 +53,11 @@ class GameScene:
         self.font = pygame.font.SysFont(None, 36)
 
         self.score = 0
+        self.final_score = 0
         self.lives = 3
         self.game_over = False
 
         self.spawn_timer = 0
-
-        # evita perder varias vidas seguidas
         self.hit_cooldown = 0
 
     def spawn_enemy(self):
@@ -94,18 +93,14 @@ class GameScene:
             self.spawn_enemy()
             self.spawn_timer = 0
 
-        # mover enemigos
         for enemy in self.enemies:
             enemy.x -= 5
 
-        # eliminar enemigos fuera de pantalla
         self.enemies = [e for e in self.enemies if e.x > -120]
 
-        # cooldown de daño
         if self.hit_cooldown > 0:
             self.hit_cooldown -= 1
 
-        # detectar colisiones
         for enemy in self.enemies[:]:
             if self.player_rect.colliderect(enemy):
 
@@ -117,8 +112,11 @@ class GameScene:
 
                 if self.lives <= 0:
                     self.game_over = True
+                    self.final_score = self.score
 
-        self.score += 1
+        # El score solo aumenta si el juego sigue activo
+        if not self.game_over:
+            self.score += 1
 
     def draw(self):
 
@@ -136,5 +134,9 @@ class GameScene:
         self.screen.blit(lives_text, (10, 40))
 
         if self.game_over:
-            text = self.font.render("GAME OVER - Presiona R", True, (255, 0, 0))
+            text = self.font.render(
+                f"GAME OVER - Puntaje: {self.final_score}",
+                True,
+                (255, 0, 0)
+            )
             self.screen.blit(text, (200, 250))
