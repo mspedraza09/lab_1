@@ -53,7 +53,7 @@ class GameScene:
         self.font = pygame.font.SysFont(None, 36)
 
         self.score = 0
-        self.final_score = 0   # ← aquí se guardará el puntaje final
+        self.final_score = 0
         self.lives = 3
         self.game_over = False
 
@@ -112,9 +112,11 @@ class GameScene:
 
                 if self.lives <= 0:
                     self.game_over = True
-                    self.final_score = self.score  # ← se guarda el puntaje final
+                    self.final_score = self.score
 
-        self.score += 1
+        # El score solo aumenta si el juego sigue activo
+        if not self.game_over:
+            self.score += 1
 
     def draw(self):
 
@@ -132,5 +134,9 @@ class GameScene:
         self.screen.blit(lives_text, (10, 40))
 
         if self.game_over:
-            text = self.font.render("GAME OVER - Presiona R", True, (255, 0, 0))
+            text = self.font.render(
+                f"GAME OVER - Puntaje: {self.final_score}",
+                True,
+                (255, 0, 0)
+            )
             self.screen.blit(text, (200, 250))
